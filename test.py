@@ -12,7 +12,7 @@ end_date = "2025-06-30"
 spy = yf.download("SPY", start=start_date, end=end_date, progress=False)
 
 # Monatsschlusskurse
-monthly_prices = spy['Close'].resample('M').last()
+monthly_prices = spy['Close'].resample('M').last().dropna()
 
 # -----------------------------------------
 # Strategie 1: Klassischer DCA
@@ -39,7 +39,7 @@ sell_trigger = False
 next_month_extra_investment = 0
 
 for date in monthly_prices.index:
-    price = monthly_prices[date]
+    price = monthly_prices.loc[date]
     month = date.month
     # Verkauf 20% in schwachem Monat
     if month in weak_months:
